@@ -78,10 +78,12 @@ import com.android.quickstep.fallback.FallbackRecentsStateController;
 import com.android.quickstep.fallback.FallbackRecentsView;
 import com.android.quickstep.fallback.RecentsDragLayer;
 import com.android.quickstep.fallback.RecentsState;
+import com.android.quickstep.SysUINavigationMode;
 import com.android.quickstep.util.RecentsAtomicAnimationFactory;
 import com.android.quickstep.util.SplitSelectStateController;
 import com.android.quickstep.util.TISBindHelper;
 import com.android.quickstep.views.MemInfoView;
+import com.android.quickstep.views.MidClearAllButton;
 import com.android.quickstep.views.OverviewActionsView;
 import com.android.quickstep.views.RecentsView;
 import com.android.quickstep.views.TaskView;
@@ -112,6 +114,7 @@ public final class RecentsActivity extends StatefulActivity<RecentsState> {
     private @Nullable TaskbarManager mTaskbarManager;
     private @Nullable FallbackTaskbarUIController mTaskbarUIController;
     private MemInfoView mMemInfoView;
+    private MidClearAllButton mMidClearAllButton;
 
     private StateManager<RecentsState> mStateManager;
 
@@ -134,6 +137,7 @@ public final class RecentsActivity extends StatefulActivity<RecentsState> {
         mFallbackRecentsView = findViewById(R.id.overview_panel);
         mActionsView = findViewById(R.id.overview_actions_view);
         mMemInfoView = findViewById(R.id.meminfo);
+        mMidClearAllButton = findViewById(R.id.mid_clear_all);
         SYSUI_PROGRESS.set(getRootView().getSysUiScrim(), 0f);
 
         SplitSelectStateController controller =
@@ -141,10 +145,13 @@ public final class RecentsActivity extends StatefulActivity<RecentsState> {
                          null /* depthController */, getStatsLogManager(),
                         SystemUiProxy.INSTANCE.get(this), RecentsModel.INSTANCE.get(this));
         mDragLayer.recreateControllers();
-        mFallbackRecentsView.init(mActionsView, controller, mMemInfoView);
+        mFallbackRecentsView.init(mActionsView, controller, mMemInfoView, mMidClearAllButton);
 
         mMemInfoView.setDp(mDeviceProfile);
         mMemInfoView.updateVerticalMargin(DisplayController.getNavigationMode(this));
+
+        mMidClearAllButton.setDp(mDeviceProfile);
+        mMidClearAllButton.updateVerticalMargin(SysUINavigationMode.getMode(this));
 
         mTISBindHelper = new TISBindHelper(this, this::onTISConnected);
     }
@@ -225,6 +232,10 @@ public final class RecentsActivity extends StatefulActivity<RecentsState> {
 
     public MemInfoView getMemInfoView() {
         return mMemInfoView;
+    }
+
+    public MidClearAllButton getMidClearAllButton() {
+        return mMidClearAllButton;
     }
 
     @Override

@@ -171,6 +171,7 @@ import com.android.quickstep.util.TISBindHelper;
 import com.android.quickstep.views.DesktopTaskView;
 import com.android.quickstep.views.FloatingTaskView;
 import com.android.quickstep.views.MemInfoView;
+import com.android.quickstep.views.MidClearAllButton;
 import com.android.quickstep.views.OverviewActionsView;
 import com.android.quickstep.views.RecentsView;
 import com.android.quickstep.views.TaskView;
@@ -210,6 +211,7 @@ public class QuickstepLauncher extends Launcher {
     private QuickstepTransitionManager mAppTransitionManager;
     private OverviewActionsView mActionsView;
     private MemInfoView mMemInfoView;
+    private MidClearAllButton mMidClearAllButton;
     private TISBindHelper mTISBindHelper;
     private @Nullable TaskbarManager mTaskbarManager;
     private @Nullable OverviewCommandHelper mOverviewCommandHelper;
@@ -239,12 +241,13 @@ public class QuickstepLauncher extends Launcher {
 
         mActionsView = findViewById(R.id.overview_actions_view);
         mMemInfoView = findViewById(R.id.meminfo);
+        mMidClearAllButton = findViewById(R.id.mid_clear_all);
         RecentsView overviewPanel = getOverviewPanel();
         mSplitSelectStateController =
                 new SplitSelectStateController(this, mHandler, getStateManager(),
                         getDepthController(), getStatsLogManager(),
                         SystemUiProxy.INSTANCE.get(this), RecentsModel.INSTANCE.get(this));
-        overviewPanel.init(mActionsView, mSplitSelectStateController, mMemInfoView);
+        overviewPanel.init(mActionsView, mSplitSelectStateController, mMemInfoView, mMidClearAllButton);
         mSplitWithKeyboardShortcutController = new SplitWithKeyboardShortcutController(this,
                 mSplitSelectStateController);
         mSplitToWorkspaceController = new SplitToWorkspaceController(this,
@@ -253,6 +256,8 @@ public class QuickstepLauncher extends Launcher {
         mActionsView.updateVerticalMargin(DisplayController.getNavigationMode(this));
         mMemInfoView.setDp(getDeviceProfile());
         mMemInfoView.updateVerticalMargin(DisplayController.getNavigationMode(this));
+        mMidClearAllButton.setDp(getDeviceProfile());
+        mMidClearAllButton.updateVerticalMargin(SysUINavigationMode.getMode(this));
 
         mAppTransitionManager = buildAppTransitionManager();
         mAppTransitionManager.registerRemoteAnimations();
@@ -979,6 +984,10 @@ public class QuickstepLauncher extends Launcher {
         return mMemInfoView;
     }
 
+    public MidClearAllButton getMidClearAllButton () {
+        return mMidClearAllButton;
+    }
+
     @Override
     protected void closeOpenViews(boolean animate) {
         super.closeOpenViews(animate);
@@ -1178,6 +1187,9 @@ public class QuickstepLauncher extends Launcher {
             }
             if (mMemInfoView != null) {
                 mMemInfoView.updateVerticalMargin(info.navigationMode);
+            }
+            if (mMidClearAllButton != null) {
+            mMidClearAllButton.updateVerticalMargin(newMode);
             }
         }
     }

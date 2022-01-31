@@ -278,6 +278,11 @@ public class DeviceProfile {
     public int memInfoMarginThreeButtonPx;
 
     /** TODO: Once we fully migrate to staged split, remove "isMultiWindowMode" */
+
+    // Mid clear all button
+    public int midClearAllMarginGesturePx;
+    public int midClearAllMarginThreeButtonPx;
+
     DeviceProfile(Context context, InvariantDeviceProfile inv, Info info, WindowBounds windowBounds,
             SparseArray<DotRenderer> dotRendererCache, boolean isMultiWindowMode,
             boolean transposeLayoutWithOrientation, boolean isMultiDisplay, boolean isGestureMode,
@@ -540,6 +545,11 @@ public class DeviceProfile {
                 R.dimen.meminfo_bottom_margin_gesture);
         memInfoMarginThreeButtonPx = res.getDimensionPixelSize(
                 R.dimen.meminfo_bottom_margin_three_button);
+
+        midClearAllMarginGesturePx = res.getDimensionPixelSize(
+                R.dimen.mid_clear_all_bottom_margin_gesture);
+        midClearAllMarginThreeButtonPx = res.getDimensionPixelSize(
+                R.dimen.mid_clear_all_bottom_margin_three_button);
 
         // Calculate all of the remaining variables.
         extraSpace = updateAvailableDimensions(res);
