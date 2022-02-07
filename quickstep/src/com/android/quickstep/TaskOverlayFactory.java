@@ -75,6 +75,14 @@ public class TaskOverlayFactory implements ResourceBasedOverride {
             }
             shortcuts.addAll(menuShortcuts);
         }
+
+        // Add screenshot action to task menu.
+        SystemShortcut screenshotShortcut = TaskShortcutFactory.SCREENSHOT
+                .getShortcut(activity, taskContainer);
+        if (screenshotShortcut != null) {
+            shortcuts.add(screenshotShortcut);
+        }
+
         RecentsOrientedState orientedState = taskView.getRecentsView().getPagedViewOrientedState();
         boolean canLauncherRotate = orientedState.isRecentsActivityRotationAllowed();
         boolean isInLandscape = orientedState.getTouchRotation() != ROTATION_0;
@@ -84,13 +92,6 @@ public class TaskOverlayFactory implements ResourceBasedOverride {
         // Add overview actions to the menu when in in-place rotate landscape mode, or in
         // grid-only overview.
         if ((!canLauncherRotate && isInLandscape) || isGridOnlyOverview) {
-            // Add screenshot action to task menu.
-            List<SystemShortcut> screenshotShortcuts = TaskShortcutFactory.SCREENSHOT
-                    .getShortcuts(activity, taskContainer);
-            if (screenshotShortcuts != null) {
-                shortcuts.addAll(screenshotShortcuts);
-            }
-
             // Add modal action only if display orientation is the same as the device orientation,
             // or in grid-only overview.
             if (orientedState.getDisplayRotation() == ROTATION_0 || isGridOnlyOverview) {
